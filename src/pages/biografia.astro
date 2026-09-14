@@ -1,0 +1,92 @@
+---
+/* Biografia — texto integral (fiel a rsdegan.com/biografia). */
+import Base from '@/layouts/Base.astro';
+import Nav from '@/components/Nav.astro';
+import Footer from '@/components/Footer.astro';
+import { Picture } from 'astro:assets';
+import retrato from '@/assets/robson-degan.png';
+import { site } from '@/data/site';
+---
+
+<Base
+  title={`Biografia — ${site.name}`}
+  description="Robson Degan (R.S. Degan), autor de Os Dragões Brancos: filosofia, tecnologia e a criação de Elarion."
+>
+  <Nav home={false} solid />
+  <main class="page">
+    <a href="/" class="back">← Voltar</a>
+    <p class="page-eyebrow">Biografia</p>
+    <h1 class="page-title">Sobre o Autor</h1>
+    <article class="article">
+      <figure class="portrait">
+        <Picture
+          src={retrato}
+          alt="Retrato de Robson Degan (R.S. Degan)."
+          widths={[240, 380, 480]}
+          sizes="(max-width: 620px) 60vw, 280px"
+          formats={['avif', 'webp']}
+          fallbackFormat="jpg"
+          loading="eager"
+        />
+      </figure>
+      <p>
+        Sou <strong>Robson Degan</strong> — ou <strong>R.S. Degan</strong>, como assino meus livros.
+        Escrevo fantasia porque foi a fantasia que me ensinou a olhar pra dentro.
+      </p>
+      <p>
+        Comecei como muita gente: desenhando dragões nas margens do caderno enquanto fingia prestar
+        atenção na aula. Meu primeiro contato com Tolkien foi com uma edição usada de <em>O Hobbit</em>,
+        comprada num sebo de bairro. A lombada estava rasgada — e, de algum jeito, aquilo me fez gostar
+        ainda mais do livro. Desde então, nunca mais parei de criar mundos.
+      </p>
+      <p>
+        <strong>“Os Dragões Brancos”</strong> nasceu como cenário de RPG, em anotações e mapas
+        improvisados. Durante a pandemia, decidi transformar aquele universo em uma história de verdade
+        — sem planos, sem editora, só com vontade de ver aquelas vozes ganharem vida. Hoje, Elarion é
+        meu lar literário.
+      </p>
+      <p>
+        Sou formado em <strong>Filosofia</strong> e trabalho desde sempre com <strong>tecnologia</strong>.
+        Entre servidores e dragões, encontro o mesmo tema: sistemas complexos, feitos de escolhas,
+        falhas e luzes intermitentes.
+      </p>
+      <p>
+        Gosto de misturar o que aprendi com o <em>Tao Te Ching</em>, a <em>Bhagavad Gita</em> e
+        <em>A Voz do Silêncio</em> com o que meus personagens vivem — porque, no fim, toda boa história
+        é uma busca por sentido.
+      </p>
+      <p>
+        Se você também cresceu entre dados de D20, livros amarelados e mapas rabiscados, provavelmente
+        vai se sentir em casa aqui. Bem-vindo a <strong>Elarion</strong>.
+      </p>
+    </article>
+  </main>
+  <Footer />
+</Base>
+
+<script>
+  import { boot } from '@/scripts/main';
+  boot();
+</script>
+
+<style>
+  .portrait {
+    float: right;
+    width: 280px;
+    max-width: 42%;
+    margin: 6px 0 24px 36px;
+  }
+  .portrait :global(img) {
+    width: 100%;
+    height: auto;
+    border: 1px solid rgba(159, 184, 212, 0.16);
+    filter: grayscale(1) contrast(1.02);
+  }
+  @media (max-width: 620px) {
+    .portrait {
+      float: none;
+      width: 62%;
+      margin: 0 auto 28px;
+    }
+  }
+</style>

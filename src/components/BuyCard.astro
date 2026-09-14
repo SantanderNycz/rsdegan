@@ -1,0 +1,67 @@
+---
+/* BuyCard — cartão de plataforma de compra. */
+interface Props {
+  href: string;
+  title: string;
+  meta: string;
+  cta: string;
+}
+const { href, title, meta, cta } = Astro.props;
+---
+
+<a class="buy" href={href} target="_blank" rel="noopener">
+  <h3>{title}</h3>
+  <p>{meta}</p>
+  <span>{cta} <i></i></span>
+</a>
+
+<style>
+  .buy {
+    background: var(--ink);
+    padding: 44px 40px;
+    text-decoration: none;
+    color: var(--bone);
+    transition: background 0.6s var(--ease);
+    display: block;
+  }
+  .buy:hover {
+    background: var(--ink-3);
+  }
+  .buy h3 {
+    font-family: var(--display);
+    font-weight: 400;
+    font-size: 1.7rem;
+    letter-spacing: 0.01em;
+  }
+  .buy p {
+    font-size: 10px;
+    letter-spacing: 0.26em;
+    text-transform: uppercase;
+    color: var(--bone-dim);
+    margin-top: 10px;
+  }
+  .buy span {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 10px;
+    letter-spacing: 0.26em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-top: 30px;
+  }
+  .buy span i {
+    width: 16px;
+    height: 1px;
+    background: currentColor;
+    transition: width 0.4s var(--ease);
+  }
+  .buy:hover span i {
+    width: 30px;
+  }
+  @media (max-width: 760px) {
+    .buy {
+      padding: 34px 28px;
+    }
+  }
+</style>

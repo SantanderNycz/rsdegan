@@ -1,0 +1,394 @@
+/* ============================================================
+   R.S. Degan — tokens + base + utilitários partilhados
+   Paleta e tipografia preservadas EXATAMENTE do protótipo v4.
+   ============================================================ */
+
+:root {
+  /* --- Tinta / fundos --- */
+  --ink: #080A0F;
+  --ink-2: #0C1119;
+  --ink-3: #101724;
+
+  /* --- Texto --- */
+  --bone: #EAEDF2;
+  --bone-dim: #8894A6;
+
+  /* --- Acentos --- */
+  --gold: #C9974D;
+  --gold-lo: #8A6733;
+  --frost: #9FB8D4;
+
+  /* --- Tipografia --- */
+  --display: "Cormorant Garamond", Georgia, serif;
+  --body: "Inter", system-ui, sans-serif;
+
+  /* --- Movimento --- */
+  --ease: cubic-bezier(.16, 1, .3, 1);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+/* Lenis controla o scroll suave; quando ativo desligamos o smooth nativo. */
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
+body {
+  background: var(--ink);
+  color: var(--bone);
+  font-family: var(--body);
+  font-weight: 300;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+::selection {
+  background: var(--gold-lo);
+  color: var(--bone);
+}
+
+/* Foco visível e consistente (a11y). */
+:focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: 3px;
+}
+
+img {
+  max-width: 100%;
+  display: block;
+}
+
+/* ---------- BOTÕES ---------- */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 10px;
+  letter-spacing: .26em;
+  text-transform: uppercase;
+  color: var(--bone);
+  text-decoration: none;
+  padding: 16px 30px;
+  border: 1px solid rgba(201, 151, 77, .42);
+  background: rgba(201, 151, 77, .04);
+  transition: background .5s var(--ease), border-color .5s var(--ease), color .5s var(--ease);
+  position: relative;
+}
+.btn:hover {
+  background: rgba(201, 151, 77, .13);
+  border-color: var(--gold);
+  color: #F3E4CC;
+}
+.btn i {
+  width: 14px;
+  height: 1px;
+  background: currentColor;
+  transition: width .4s var(--ease);
+}
+.btn:hover i {
+  width: 24px;
+}
+.btn--ghost {
+  border-color: rgba(159, 184, 212, .24);
+  background: none;
+}
+.btn--ghost:hover {
+  border-color: var(--frost);
+  background: rgba(159, 184, 212, .07);
+  color: var(--bone);
+}
+
+/* ---------- TIPOGRAFIA DE SECÇÃO ---------- */
+.label {
+  font-size: 10px;
+  letter-spacing: .4em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 40px;
+}
+.lede {
+  font-family: var(--display);
+  font-weight: 300;
+  font-size: clamp(1.8rem, 3.6vw, 3rem);
+  line-height: 1.34;
+  max-width: 19ch;
+}
+.prose {
+  font-size: 1.02rem;
+  line-height: 1.85;
+  color: var(--bone-dim);
+  max-width: 58ch;
+  margin-top: 30px;
+}
+.prose em {
+  font-style: italic;
+  color: var(--frost);
+}
+.mt {
+  margin-top: 48px;
+}
+
+/* ---------- LAYOUT DE SECÇÃO ---------- */
+section {
+  position: relative;
+  padding: 170px 48px;
+}
+.wrap {
+  max-width: 1240px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 2;
+}
+.band {
+  background: var(--ink-2);
+}
+.cols {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 80px;
+  align-items: start;
+}
+.quote {
+  font-family: var(--display);
+  font-style: italic;
+  font-weight: 300;
+  font-size: clamp(1.8rem, 4vw, 3.1rem);
+  line-height: 1.42;
+  text-align: center;
+  max-width: 22ch;
+  margin: 0 auto;
+}
+.attrib {
+  text-align: center;
+  font-size: 10px;
+  letter-spacing: 0.34em;
+  text-transform: uppercase;
+  color: var(--bone-dim);
+  margin-top: 44px;
+}
+
+/* ---------- SILHUETAS ---------- */
+.silh {
+  position: absolute;
+  pointer-events: none;
+  opacity: 0;
+  fill: var(--frost);
+  transition: opacity 1.8s ease;
+  z-index: 1;
+}
+.silh.in {
+  opacity: 0.1;
+}
+.silh--dragon {
+  right: -16%;
+  top: -8%;
+  width: 62%;
+}
+.silh--sword {
+  left: -5%;
+  top: 2%;
+  width: 19%;
+}
+
+@media (max-width: 900px) {
+  .cols {
+    grid-template-columns: 1fr;
+    gap: 56px;
+  }
+}
+@media (max-width: 760px) {
+  section {
+    padding: 104px 22px;
+  }
+}
+
+/* ---------- PÁGINAS INTERNAS (blog, biografia) ---------- */
+.page {
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 160px 24px 120px;
+}
+.page--wide {
+  max-width: 1100px;
+}
+.back {
+  display: inline-block;
+  margin-bottom: 40px;
+  font-size: 10px;
+  letter-spacing: 0.26em;
+  text-transform: uppercase;
+  color: var(--gold);
+  text-decoration: none;
+}
+.back:hover {
+  color: #f3e4cc;
+}
+.page-eyebrow {
+  font-size: 10px;
+  letter-spacing: 0.4em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 22px;
+}
+.page-title {
+  font-family: var(--display);
+  font-weight: 300;
+  font-size: clamp(2.4rem, 6vw, 4.4rem);
+  line-height: 1.02;
+  letter-spacing: 0.01em;
+}
+
+/* Corpo de artigo (Markdown renderizado) */
+.article {
+  font-size: 1.06rem;
+  line-height: 1.85;
+  color: #c3ccda;
+}
+.article > * + * {
+  margin-top: 1.5em;
+}
+.article h2 {
+  font-family: var(--display);
+  font-weight: 400;
+  font-size: clamp(1.7rem, 3.4vw, 2.4rem);
+  line-height: 1.2;
+  color: var(--bone);
+  margin-top: 2.4em;
+  letter-spacing: 0.01em;
+}
+.article h3 {
+  font-family: var(--display);
+  font-weight: 500;
+  font-size: 1.4rem;
+  color: var(--bone);
+  margin-top: 2em;
+}
+.article a {
+  color: var(--gold);
+  text-decoration: none;
+  border-bottom: 1px solid rgba(201, 151, 77, 0.3);
+  transition: border-color 0.3s;
+}
+.article a:hover {
+  border-bottom-color: var(--gold);
+}
+.article em {
+  font-style: italic;
+  color: var(--frost);
+}
+.article strong {
+  color: var(--bone);
+  font-weight: 500;
+}
+.article blockquote {
+  border-left: 2px solid var(--gold-lo);
+  padding-left: 26px;
+  font-family: var(--display);
+  font-style: italic;
+  font-size: 1.3rem;
+  line-height: 1.5;
+  color: var(--frost);
+}
+.article ul,
+.article ol {
+  padding-left: 1.4em;
+}
+.article li + li {
+  margin-top: 0.5em;
+}
+.article img {
+  border: 1px solid rgba(159, 184, 212, 0.14);
+  border-radius: 2px;
+}
+.article hr {
+  border: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(159, 184, 212, 0.24), transparent);
+  margin: 2.6em 0;
+}
+
+/* Metadados do artigo */
+.article-meta {
+  font-size: 10px;
+  letter-spacing: 0.26em;
+  text-transform: uppercase;
+  color: var(--bone-dim);
+  margin-top: 26px;
+}
+
+/* Lista de posts do blog */
+.post-list {
+  list-style: none;
+  margin-top: 20px;
+  border-top: 1px solid rgba(159, 184, 212, 0.12);
+}
+.post-item a {
+  display: block;
+  text-decoration: none;
+  color: var(--bone);
+  padding: 34px 0;
+  border-bottom: 1px solid rgba(159, 184, 212, 0.12);
+  transition: padding-left 0.5s var(--ease);
+}
+.post-item a:hover {
+  padding-left: 14px;
+}
+.post-item time {
+  font-size: 10px;
+  letter-spacing: 0.26em;
+  text-transform: uppercase;
+  color: var(--gold);
+}
+.post-item h2 {
+  font-family: var(--display);
+  font-weight: 400;
+  font-size: clamp(1.5rem, 3vw, 2.1rem);
+  line-height: 1.2;
+  margin-top: 12px;
+}
+.post-item p {
+  color: var(--bone-dim);
+  margin-top: 12px;
+  max-width: 62ch;
+  line-height: 1.7;
+}
+
+/* ---------- REVEAL (fallback CSS, sem JS/GSAP) ---------- */
+/* Estado inicial só é aplicado quando o JS assume o controlo (classe no <html>). */
+.js-motion .rv {
+  opacity: 0;
+  transform: translateY(30px);
+}
+
+/* ---------- ACESSIBILIDADE: movimento reduzido ---------- */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  .js-motion .rv {
+    opacity: 1;
+    transform: none;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: .001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .001ms !important;
+  }
+}

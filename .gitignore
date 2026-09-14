@@ -1,0 +1,20 @@
+# build output
+dist/
+.output/
+.vercel/
+
+# dependencies
+node_modules/
+
+# astro
+.astro/
+
+# env
+.env
+.env.production
+
+# os / editor
+.DS_Store
+Thumbs.db
+*.log
+npm-debug.log*

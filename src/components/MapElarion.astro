@@ -1,0 +1,147 @@
+---
+/* MapElarion — mapa com pan/zoom interativo (ilha isolada, lógica em map.ts).
+   ------------------------------------------------------------------
+   ASSET EM FALTA: não existe ainda ficheiro do mapa.
+   Para ativar o pan/zoom:
+     1. Colocar a arte em: src/assets/mapa-elarion.png  (ideal: ≥2500px largura)
+     2. Descomentar o import abaixo e trocar `mapSrc` para essa imagem.
+   Enquanto `mapSrc` for null, renderiza um placeholder marcado e a
+   lógica de pan/zoom não é inicializada.
+   ------------------------------------------------------------------ */
+import { Picture } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+import mapaElarion from '@/assets/mapa-elarion.jpg';
+
+const mapSrc: ImageMetadata | null = mapaElarion; // mapa oficial de Elarion
+---
+
+{
+  mapSrc ? (
+    <figure class="map map--live">
+      <div
+        class="map-viewport"
+        data-map-viewport
+        tabindex="0"
+        role="img"
+        aria-label="Mapa de Elarion. Arraste para deslocar; use as setas do teclado e as teclas + e − para ampliar."
+      >
+        <div class="map-canvas" data-map-canvas>
+          <Picture
+            src={mapSrc}
+            alt="Mapa do reino de Elarion: Avarenth, Vale de Nyrah, Picos do Trovão, Marshber, Maré Solitária e territórios vizinhos."
+            widths={[640, 960, 1279]}
+            sizes="(max-width: 900px) 90vw, 560px"
+            formats={['avif', 'webp']}
+            fallbackFormat="jpg"
+            loading="lazy"
+            draggable={false}
+          />
+        </div>
+      </div>
+      <div class="map-controls" aria-hidden="false">
+        <button type="button" data-map-zoom-out aria-label="Diminuir zoom">−</button>
+        <button type="button" data-map-reset aria-label="Repor mapa">↺</button>
+        <button type="button" data-map-zoom-in aria-label="Aumentar zoom">+</button>
+      </div>
+    </figure>
+  ) : (
+    <div class="map map--placeholder" role="img" aria-label="Mapa de Elarion (arte por integrar)">
+      <p>Mapa de Elarion</p>
+      <small>Arte do mapa por integrar</small>
+    </div>
+  )
+}
+
+<style>
+  .map {
+    position: relative;
+    border: 1px solid rgba(159, 184, 212, 0.16);
+    aspect-ratio: 4 / 3;
+    overflow: hidden;
+    background: var(--ink-3);
+    transition: border-color 0.6s var(--ease);
+  }
+  .map--placeholder {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+  }
+  .map--placeholder p {
+    font-size: 10px;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--bone-dim);
+  }
+  .map--placeholder small {
+    font-size: 9px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--gold-lo);
+  }
+
+  /* --- versão interativa --- */
+  .map--live {
+    aspect-ratio: 3 / 4; /* mapa é retrato (1279×2049) */
+    background: #0a1018;
+  }
+  .map--live:hover {
+    border-color: rgba(201, 151, 77, 0.45);
+  }
+  .map-viewport {
+    position: absolute;
+    inset: 0;
+    cursor: grab;
+    touch-action: none;
+    overflow: hidden;
+  }
+  .map-viewport.is-zoomed {
+    cursor: grab;
+  }
+  .map-viewport:active {
+    cursor: grabbing;
+  }
+  .map-canvas {
+    width: 100%;
+    height: 100%;
+    transform-origin: center center;
+    will-change: transform;
+  }
+  .map-canvas :global(img) {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    -webkit-user-select: none;
+    user-select: none;
+  }
+  .map-controls {
+    position: absolute;
+    right: 14px;
+    bottom: 14px;
+    display: flex;
+    gap: 6px;
+    z-index: 2;
+  }
+  .map-controls button {
+    width: 34px;
+    height: 34px;
+    display: grid;
+    place-items: center;
+    background: rgba(8, 10, 15, 0.72);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(159, 184, 212, 0.2);
+    color: var(--bone);
+    font-size: 16px;
+    line-height: 1;
+    cursor: pointer;
+    transition:
+      border-color 0.4s var(--ease),
+      color 0.4s var(--ease);
+  }
+  .map-controls button:hover {
+    border-color: var(--gold);
+    color: var(--gold);
+  }
+</style>

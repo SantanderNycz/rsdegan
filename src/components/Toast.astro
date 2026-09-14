@@ -1,0 +1,101 @@
+---
+/* Toast — aviso "já disponível" (substitui o antigo popup Elementor). */
+import { book, toast } from '@/data/site';
+---
+
+<aside class="toast" id="toast" role="complementary" aria-label="Aviso de lançamento">
+  <button class="x" id="toastX" aria-label="Fechar aviso">×</button>
+  <b>{toast.badge}</b>
+  <p>
+    Descubra o mundo de <em>{book.title}</em>. Aventure-se por Elarion — {book.volume} já à venda
+    na UICLAP.
+  </p>
+  <a href={toast.href} target="_blank" rel="noopener">Compre agora <i></i></a>
+</aside>
+
+<style>
+  .toast {
+    position: fixed;
+    right: 28px;
+    bottom: 28px;
+    z-index: 90;
+    max-width: 340px;
+    background: rgba(12, 17, 25, 0.9);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(201, 151, 77, 0.3);
+    padding: 28px 30px;
+    opacity: 0;
+    transform: translateY(20px);
+    pointer-events: none;
+    transition:
+      opacity 0.8s var(--ease),
+      transform 0.8s var(--ease);
+  }
+  .toast.on {
+    opacity: 1;
+    transform: none;
+    pointer-events: auto;
+  }
+  .toast b {
+    display: block;
+    font-size: 9px;
+    letter-spacing: 0.36em;
+    text-transform: uppercase;
+    color: var(--gold);
+    font-weight: 400;
+    margin-bottom: 14px;
+  }
+  .toast p {
+    font-size: 0.9rem;
+    line-height: 1.65;
+    color: var(--bone-dim);
+  }
+  .toast p em {
+    font-style: italic;
+    color: var(--bone);
+  }
+  .toast .x {
+    position: absolute;
+    top: 10px;
+    right: 12px;
+    background: none;
+    border: 0;
+    color: var(--bone-dim);
+    cursor: pointer;
+    font-size: 15px;
+    line-height: 1;
+    padding: 6px;
+  }
+  .toast .x:hover {
+    color: var(--bone);
+  }
+  .toast a {
+    display: inline-flex;
+    align-items: center;
+    gap: 9px;
+    margin-top: 20px;
+    font-size: 9px;
+    letter-spacing: 0.26em;
+    text-transform: uppercase;
+    color: var(--gold);
+    text-decoration: none;
+  }
+  .toast a i {
+    width: 14px;
+    height: 1px;
+    background: currentColor;
+    transition: width 0.4s var(--ease);
+  }
+  .toast a:hover i {
+    width: 26px;
+  }
+  @media (max-width: 760px) {
+    .toast {
+      left: 16px;
+      right: 16px;
+      bottom: 16px;
+      max-width: none;
+    }
+  }
+</style>

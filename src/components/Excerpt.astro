@@ -1,0 +1,22 @@
+---
+/* Excerpt — passagem real do livro.
+   A citação do protótipo era PLACEHOLDER inventado na fase de design e NÃO
+   é usada. Esta secção só é renderizada quando `quote` for uma passagem real
+   fornecida pelo autor — nada é gerado automaticamente. */
+interface Props {
+  quote: string | null;
+  attrib?: string;
+}
+const { quote, attrib } = Astro.props;
+---
+
+{
+  quote && (
+    <section class="band excerpt" id="excerto">
+      <div class="wrap">
+        <blockquote class="quote rv">{quote}</blockquote>
+        {attrib && <p class="attrib rv">{attrib}</p>}
+      </div>
+    </section>
+  )
+}

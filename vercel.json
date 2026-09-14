@@ -1,0 +1,37 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "headers": [
+    {
+      "source": "/_astro/(.*)",
+      "headers": [{ "key": "Cache-Control", "value": "public, max-age=31536000, immutable" }]
+    },
+    {
+      "source": "/(.*).(avif|webp|jpg|png|svg|woff2)",
+      "headers": [{ "key": "Cache-Control", "value": "public, max-age=31536000, immutable" }]
+    }
+  ],
+  "redirects": [
+    { "source": "/as-racas-de-elarion-um-glossario-completo", "destination": "/blog/as-racas-de-elarion-um-glossario-completo", "permanent": true },
+    { "source": "/magia-em-elarion-tres-visoes-oito-escolas-e-um-equilibrio-fragil", "destination": "/blog/magia-em-elarion-tres-visoes-oito-escolas-e-um-equilibrio-fragil", "permanent": true },
+    { "source": "/avarenth-coracao-de-prosperidade-a-capital-de-elarion", "destination": "/blog/avarenth-coracao-de-prosperidade-a-capital-de-elarion", "permanent": true },
+    { "source": "/mais-do-que-uma-ilha-a-rebeldia-silenciosa-de-zyric-caelmorn", "destination": "/blog/mais-do-que-uma-ilha-a-rebeldia-silenciosa-de-zyric-caelmorn", "permanent": true },
+    { "source": "/o-despertar-do-inverno-por-que-a-ganancia-e-o-pior-dos-monstros", "destination": "/blog/o-despertar-do-inverno-por-que-a-ganancia-e-o-pior-dos-monstros", "permanent": true },
+    { "source": "/o-sabio-interior-azhar-jung-e-a-sabedoria-que-emerge-do-inconsciente", "destination": "/blog/o-sabio-interior-azhar-jung-e-a-sabedoria-que-emerge-do-inconsciente", "permanent": true },
+    { "source": "/a-luz-que-equilibra-ismira-sartre-e-a-coragem-de-ser-autenticamente-livre", "destination": "/blog/a-luz-que-equilibra-ismira-sartre-e-a-coragem-de-ser-autenticamente-livre", "permanent": true },
+    { "source": "/saindo-da-caverna-interior-a-jornada-de-zyric-entre-platao-e-jung-em-os-dragoes-brancos", "destination": "/blog/saindo-da-caverna-interior-a-jornada-de-zyric-entre-platao-e-jung-em-os-dragoes-brancos", "permanent": true },
+    { "source": "/o-divino-aprisionado-kryovax-nietzsche-e-a-necessidade-de-matar-deus-para-renascer", "destination": "/blog/o-divino-aprisionado-kryovax-nietzsche-e-a-necessidade-de-matar-deus-para-renascer", "permanent": true },
+    { "source": "/o-fardo-do-dever-como-o-amor-impossivel-de-tristan-revela-a-etica-de-kant-em-os-dragoes-brancos", "destination": "/blog/o-fardo-do-dever-como-o-amor-impossivel-de-tristan-revela-a-etica-de-kant-em-os-dragoes-brancos", "permanent": true },
+    { "source": "/as-virtudes-do-heroi-na-fantasia-medieval-de-aristoteles-a-game-of-thrones", "destination": "/blog/as-virtudes-do-heroi-na-fantasia-medieval-de-aristoteles-a-game-of-thrones", "permanent": true },
+    { "source": "/o-que-nietzsche-platao-e-tolkien-tem-em-comum", "destination": "/blog/o-que-nietzsche-platao-e-tolkien-tem-em-comum", "permanent": true },
+    { "source": "/10-obras-que-inspiraram-os-dragoesbrancos-da-filosofia-a-fantasia", "destination": "/blog/10-obras-que-inspiraram-os-dragoesbrancos-da-filosofia-a-fantasia", "permanent": true },
+    { "source": "/o-medo-de-dar-certo", "destination": "/blog/o-medo-de-dar-certo", "permanent": true },
+    { "source": "/elarion-e-uma-cancao-excerto-do-diario-de-lorcan-briarwood", "destination": "/blog/elarion-e-uma-cancao-excerto-do-diario-de-lorcan-briarwood", "permanent": true },
+    { "source": "/a-lamina-do-eco-prateado-simbolo-memoria-e-misterio", "destination": "/blog/a-lamina-do-eco-prateado-simbolo-memoria-e-misterio", "permanent": true },
+    { "source": "/os-dragoes-brancos-a-origem-da-vinganca-de-zyric", "destination": "/blog/os-dragoes-brancos-a-origem-da-vinganca-de-zyric", "permanent": true },
+    { "source": "/elarion", "destination": "/blog/elarion", "permanent": true },
+    { "source": "/filosofia-e-fantasia", "destination": "/blog/filosofia-e-fantasia", "permanent": true },
+    { "source": "/555-2", "destination": "/blog", "permanent": true },
+    { "source": "/contato", "destination": "/#contato", "permanent": true },
+    { "source": "/politica-de-privacidade", "destination": "/", "permanent": true }
+  ]
+}

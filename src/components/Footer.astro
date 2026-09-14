@@ -1,0 +1,106 @@
+---
+/* Footer — marca, navegação e obra. */
+import { site, book } from '@/data/site';
+const year = new Date().getFullYear();
+---
+
+<footer>
+  <div class="fgrid">
+    <div>
+      <p class="fmark">{site.name}</p>
+      <p class="prose foot-lead">
+        Autor de fantasia medieval. Criador de <em>{book.title}</em>.
+      </p>
+    </div>
+    <div>
+      <h4>Explorar</h4>
+      <ul>
+        <li><a href="#autor">Biografia</a></li>
+        <li><a href="#contato">Contato</a></li>
+        <li><a href="/blog">Jornal de Elarion</a></li>
+      </ul>
+    </div>
+    <div>
+      <h4>A obra</h4>
+      <ul>
+        <li><a href={book.amazon} target="_blank" rel="noopener">Amazon Kindle</a></li>
+        <li><a href={book.uiclap} target="_blank" rel="noopener">UICLAP · Livro físico</a></li>
+        <li><a href={site.instagram} target="_blank" rel="noopener">Instagram</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="fbot">
+    <p>© {year} {site.name}. Todos os direitos reservados.</p>
+  </div>
+</footer>
+
+<style>
+  footer {
+    background: var(--ink-2);
+    border-top: 1px solid rgba(159, 184, 212, 0.1);
+    padding: 100px 48px 44px;
+  }
+  .fgrid {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr;
+    gap: 60px;
+    max-width: 1240px;
+    margin: 0 auto;
+  }
+  footer h4 {
+    font-size: 10px;
+    letter-spacing: 0.34em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 26px;
+    font-weight: 400;
+  }
+  footer ul {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+  footer a {
+    color: var(--bone-dim);
+    text-decoration: none;
+    font-size: 0.92rem;
+    transition: color 0.4s;
+  }
+  footer a:hover {
+    color: var(--bone);
+  }
+  .fmark {
+    font-family: var(--display);
+    font-size: 1.7rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+  .foot-lead {
+    margin-top: 18px;
+    max-width: 34ch;
+  }
+  .fbot {
+    max-width: 1240px;
+    margin: 80px auto 0;
+    padding-top: 30px;
+    border-top: 1px solid rgba(159, 184, 212, 0.08);
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+    flex-wrap: wrap;
+    font-size: 0.8rem;
+    color: var(--bone-dim);
+  }
+  @media (max-width: 900px) {
+    .fgrid {
+      grid-template-columns: 1fr;
+      gap: 44px;
+    }
+  }
+  @media (max-width: 760px) {
+    footer {
+      padding: 70px 22px 36px;
+    }
+  }
+</style>

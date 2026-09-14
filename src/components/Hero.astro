@@ -1,0 +1,202 @@
+---
+/* Hero — imagem retrato (percurso sticky) + névoa/neve + reveal do nome. */
+import { Picture } from 'astro:assets';
+import bg from '@/assets/bg.png';
+import { site, book } from '@/data/site';
+---
+
+<header class="hero" id="topo">
+  <div class="stage">
+    <div class="bg">
+      <Picture
+        src={bg}
+        alt=""
+        id="bgimg"
+        formats={['avif', 'webp']}
+        fallbackFormat="jpg"
+        widths={[512, 768, 1024]}
+        sizes="100vw"
+        loading="eager"
+        fetchpriority="high"
+        aria-hidden="true"
+      />
+    </div>
+    <canvas id="mist" aria-hidden="true"></canvas>
+    <canvas id="snowFar" aria-hidden="true"></canvas>
+    <canvas id="snowMid" aria-hidden="true"></canvas>
+
+    <div class="hero-inner" id="heroInner">
+      <p class="eyebrow">{site.role}</p>
+      <h1 id="title">{site.name}</h1>
+      <div class="rule" id="rule"></div>
+      <div class="welcome">
+        <span>Bem-vindo ao universo de</span>
+        <em>{book.title}</em>
+      </div>
+      <div class="hero-cta">
+        <a href="#ondecomprar" class="btn">Leia agora <i></i></a>
+      </div>
+    </div>
+
+    <canvas id="snowNear" aria-hidden="true"></canvas>
+    <div class="grain" aria-hidden="true"></div>
+    <p class="cue" id="cue" aria-hidden="true">Descer<i></i></p>
+  </div>
+</header>
+
+<style>
+  .hero {
+    position: relative;
+    height: 158vh;
+    background: var(--ink);
+  }
+  .stage {
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .bg {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+  }
+  .bg :global(img) {
+    position: absolute;
+    left: 50%;
+    top: 0;
+    filter: saturate(0.62) brightness(0.5) contrast(1.16);
+    will-change: transform;
+  }
+  .bg::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    background:
+      linear-gradient(
+        to bottom,
+        rgba(8, 10, 15, 0.5) 0%,
+        rgba(8, 10, 15, 0.12) 30%,
+        rgba(8, 10, 15, 0.55) 74%,
+        var(--ink) 100%
+      ),
+      radial-gradient(ellipse 68% 54% at 50% 48%, rgba(8, 10, 15, 0.72) 0%, transparent 72%);
+  }
+  #mist {
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    pointer-events: none;
+  }
+  /* Sem filter:blur() — a suavidade vem dos sprites da neve (ver snow.ts).
+     Blur em canvas que repinta a cada frame era um dos maiores custos. */
+  #snowFar {
+    position: absolute;
+    inset: 0;
+    z-index: 3;
+    pointer-events: none;
+  }
+  #snowMid {
+    position: absolute;
+    inset: 0;
+    z-index: 4;
+    pointer-events: none;
+  }
+  #snowNear {
+    position: absolute;
+    inset: 0;
+    z-index: 7;
+    pointer-events: none;
+  }
+  /* Grão estático (blend normal): mix-blend-mode sobre canvas em animação
+     obrigava a recompor o overlay a cada frame. */
+  .grain {
+    position: absolute;
+    inset: 0;
+    z-index: 8;
+    pointer-events: none;
+    opacity: 0.05;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+
+  .hero-inner {
+    position: relative;
+    z-index: 6;
+    text-align: center;
+    padding: 0 24px;
+    will-change: transform, opacity;
+  }
+  .eyebrow {
+    font-size: 10px;
+    letter-spacing: 0.44em;
+    text-transform: uppercase;
+    color: var(--frost);
+    margin-bottom: 30px;
+  }
+  h1 {
+    font-family: var(--display);
+    font-weight: 300;
+    font-size: clamp(3rem, 10vw, 8.6rem);
+    line-height: 0.94;
+    letter-spacing: 0.03em;
+    text-shadow:
+      0 0 100px rgba(8, 10, 15, 0.92),
+      0 0 34px rgba(8, 10, 15, 0.75);
+  }
+  .rule {
+    width: 0;
+    height: 1px;
+    margin: 36px auto 0;
+    background: linear-gradient(90deg, transparent, var(--gold) 22%, var(--gold) 78%, transparent);
+  }
+  .welcome {
+    margin-top: 30px;
+  }
+  .welcome span {
+    display: block;
+    font-size: 10px;
+    letter-spacing: 0.4em;
+    text-transform: uppercase;
+    color: var(--bone-dim);
+    margin-bottom: 14px;
+  }
+  .welcome em {
+    font-family: var(--display);
+    font-style: italic;
+    font-weight: 400;
+    font-size: clamp(1.5rem, 3.4vw, 2.5rem);
+    color: var(--frost);
+    letter-spacing: 0.02em;
+  }
+  .hero-cta {
+    margin-top: 44px;
+  }
+  .cue {
+    position: absolute;
+    bottom: 34px;
+    left: 50%;
+    z-index: 6;
+    font-size: 9px;
+    letter-spacing: 0.36em;
+    text-transform: uppercase;
+    color: var(--bone-dim);
+    transform: translateX(-50%);
+  }
+  .cue i {
+    display: block;
+    width: 1px;
+    height: 44px;
+    background: linear-gradient(var(--gold), transparent);
+    margin: 12px auto 0;
+  }
+
+  @media (max-width: 760px) {
+    .hero {
+      height: 132vh;
+    }
+  }
+</style>

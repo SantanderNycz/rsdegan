@@ -1,0 +1,93 @@
+---
+/* SeoHead — meta tags, Open Graph, Twitter e JSON-LD (Person + Book). */
+import { site, book } from '@/data/site';
+
+interface Props {
+  title?: string;
+  description?: string;
+}
+
+const { title = site.title, description = site.description } = Astro.props;
+
+const canonical = new URL(Astro.url.pathname, Astro.site ?? site.url).toString();
+const ogImage = new URL(site.ogImage, Astro.site ?? site.url).toString();
+
+const personLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Person',
+  name: site.name,
+  url: site.url,
+  jobTitle: 'Autor',
+  description:
+    'Autor de fantasia épica, criador de Os Dragões Brancos.',
+  sameAs: [site.instagram],
+  knowsAbout: ['Fantasia épica', 'Fantasia medieval', 'Literatura fantástica'],
+};
+
+const bookLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Book',
+  name: book.title,
+  inLanguage: 'pt-BR',
+  author: { '@type': 'Person', name: site.name, url: site.url },
+  ...(book.isbn ? { isbn: book.isbn } : {}),
+  url: site.url,
+  workExample: [
+    {
+      '@type': 'Book',
+      bookFormat: 'https://schema.org/EBook',
+      name: `${book.title} — Edição Kindle`,
+      inLanguage: 'pt-BR',
+      potentialAction: {
+        '@type': 'ReadAction',
+        target: book.amazon,
+      },
+      offers: {
+        '@type': 'Offer',
+        availability: 'https://schema.org/InStock',
+        url: book.amazon,
+      },
+    },
+    {
+      '@type': 'Book',
+      bookFormat: 'https://schema.org/Paperback',
+      name: `${book.title} — Livro físico`,
+      inLanguage: 'pt-BR',
+      offers: {
+        '@type': 'Offer',
+        availability: 'https://schema.org/InStock',
+        url: book.uiclap,
+      },
+    },
+  ],
+};
+---
+
+<title>{title}</title>
+<meta name="description" content={description} />
+<link rel="canonical" href={canonical} />
+<meta name="author" content={site.name} />
+<meta name="robots" content="index, follow" />
+<meta name="theme-color" content="#080A0F" />
+
+<!-- Open Graph -->
+<meta property="og:type" content="website" />
+<meta property="og:site_name" content={site.name} />
+<meta property="og:title" content={title} />
+<meta property="og:description" content={description} />
+<meta property="og:url" content={canonical} />
+<meta property="og:locale" content={site.locale} />
+<meta property="og:image" content={ogImage} />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta property="og:image:alt" content={`${site.name} — ${book.title}`} />
+
+<!-- Twitter -->
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content={title} />
+<meta name="twitter:description" content={description} />
+<meta name="twitter:image" content={ogImage} />
+
+<!-- JSON-LD -->
+<script type="application/ld+json" set:html={JSON.stringify(personLd)} is:inline />
+<script type="application/ld+json" set:html={JSON.stringify(bookLd)} is:inline />

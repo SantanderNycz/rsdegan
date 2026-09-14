@@ -1,0 +1,46 @@
+---
+/* Jornal de Elarion — índice do blog. */
+import Base from '@/layouts/Base.astro';
+import Nav from '@/components/Nav.astro';
+import Footer from '@/components/Footer.astro';
+import { getCollection } from 'astro:content';
+import { site } from '@/data/site';
+
+const posts = (await getCollection('blog', ({ data }) => !data.draft)).sort(
+  (a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime()
+);
+
+const fmt = (d: Date) =>
+  d.toLocaleDateString('pt-BR', { day: '2-digit', month: 'long', year: 'numeric' });
+---
+
+<Base
+  title={`Jornal de Elarion — ${site.name}`}
+  description="Reflexões, anúncios e relatos de bastidores do universo de Os Dragões Brancos."
+>
+  <Nav home={false} solid />
+  <main class="page">
+    <a href="/" class="back">← Voltar</a>
+    <p class="page-eyebrow">Jornal de Elarion</p>
+    <h1 class="page-title">Reflexões, anúncios e bastidores</h1>
+    <ul class="post-list">
+      {
+        posts.map((p) => (
+          <li class="post-item">
+            <a href={`/blog/${p.id}/`}>
+              <time datetime={p.data.pubDate.toISOString()}>{fmt(p.data.pubDate)}</time>
+              <h2>{p.data.title}</h2>
+              <p>{p.data.description}</p>
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </main>
+  <Footer />
+</Base>
+
+<script>
+  import { boot } from '@/scripts/main';
+  boot();
+</script>

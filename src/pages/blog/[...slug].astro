@@ -1,0 +1,60 @@
+---
+/* Jornal de Elarion — página de post. */
+import Base from '@/layouts/Base.astro';
+import Nav from '@/components/Nav.astro';
+import Footer from '@/components/Footer.astro';
+import { getCollection, render } from 'astro:content';
+import { site } from '@/data/site';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('blog', ({ data }) => !data.draft);
+  return posts.map((post) => ({ params: { slug: post.id }, props: { post } }));
+}
+
+const { post } = Astro.props;
+const { Content } = await render(post);
+
+const fmt = (d: Date) =>
+  d.toLocaleDateString('pt-BR', { day: '2-digit', month: 'long', year: 'numeric' });
+
+const postLd = {
+  '@context': 'https://schema.org',
+  '@type': 'BlogPosting',
+  headline: post.data.title,
+  description: post.data.description,
+  datePublished: post.data.pubDate.toISOString(),
+  author: { '@type': 'Person', name: post.data.author, url: site.url },
+  inLanguage: 'pt-BR',
+  mainEntityOfPage: `${site.url}/blog/${post.id}/`,
+};
+---
+
+<Base title={`${post.data.title} — Jornal de Elarion`} description={post.data.description}>
+  <Nav home={false} solid />
+  <main class="page">
+    <a href="/blog" class="back">← Jornal de Elarion</a>
+    <p class="page-eyebrow">Jornal de Elarion</p>
+    <h1 class="page-title">{post.data.title}</h1>
+    <p class="article-meta">
+      {fmt(post.data.pubDate)} · {post.data.author}{
+        post.data.category ? ` · ${post.data.category}` : ''
+      }
+    </p>
+    <article class="article">
+      <Content />
+    </article>
+  </main>
+  <Footer />
+  <script type="application/ld+json" set:html={JSON.stringify(postLd)} is:inline />
+</Base>
+
+<script>
+  import { boot } from '@/scripts/main';
+  boot();
+</script>
+
+<style>
+  .article {
+    margin-top: 48px;
+  }
+</style>

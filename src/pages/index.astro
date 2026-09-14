@@ -1,0 +1,244 @@
+---
+/* index — página única. Conteúdo PT-BR verbatim do protótipo. */
+import Base from '@/layouts/Base.astro';
+import Nav from '@/components/Nav.astro';
+import Hero from '@/components/Hero.astro';
+import Silhouette from '@/components/Silhouette.astro';
+import Excerpt from '@/components/Excerpt.astro';
+import MapElarion from '@/components/MapElarion.astro';
+import BuyCard from '@/components/BuyCard.astro';
+import Footer from '@/components/Footer.astro';
+import Toast from '@/components/Toast.astro';
+import { Picture } from 'astro:assets';
+import capa from '@/assets/capa-os-dragoes-brancos.png';
+import { buys, book, site, contact } from '@/data/site';
+---
+
+<Base>
+  <Nav />
+  <Hero />
+
+  <!-- ===== A OBRA ===== -->
+  <section id="obra">
+    <Silhouette variant="dragon" />
+    <div class="wrap">
+      <h2 class="label rv">{book.title}</h2>
+      <div class="cols cols--obra">
+        <div class="cover-wrap rv">
+          <Picture
+            class="cover"
+            src={capa}
+            alt={`Capa de ${book.title} — ${book.volume}: O Inverno de Elarion`}
+            widths={[340, 500, 680]}
+            sizes="(max-width: 900px) 62vw, 440px"
+            formats={['avif', 'webp']}
+            fallbackFormat="jpg"
+            loading="lazy"
+          />
+        </div>
+        <div>
+          <p class="lede rv">Em meio ao silêncio das montanhas, um legado desperta.</p>
+          <p class="prose rv">
+            <em>{book.title}</em> é uma jornada épica entre reinos ameaçados por sombras antigas.
+            Acompanhe Zyric, um guerreiro marcado pelo passado, e Ismira, uma jovem tocada pela
+            magia, enquanto enfrentam profecias, segredos e monstros que não vivem apenas do lado de
+            fora.
+          </p>
+          <p class="prose rv">Uma saga para quem ama fantasia com alma, ritmo e verdade.</p>
+          <div class="mt rv">
+            <a href="#ondecomprar" class="btn btn--ghost">Leia agora <i></i></a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== EXCERTO ===== (renderiza só com passagem real; ver Excerpt.astro) -->
+  <Excerpt quote={null} attrib={`${book.title} · ${book.volume}`} />
+
+  <!-- ===== O AUTOR ===== -->
+  <section id="autor">
+    <Silhouette variant="sword" />
+    <div class="wrap">
+      <h2 class="label rv">Sobre o autor</h2>
+      <div class="cols">
+        <div>
+          <p class="lede rv">Lendas tecidas com coragem, magia e propósito.</p>
+        </div>
+        <div>
+          <p class="prose rv">
+            {site.name} é autor de fantasia épica com alma. Suas histórias misturam a grandiosidade
+            de mundos como os de Tolkien e Salvatore com a profundidade espiritual de Blavatsky.
+            Criador de <em>{book.title}</em>, Degan tece lendas com coragem, magia e propósito.
+          </p>
+          <p class="prose rv">
+            Vive entre livros, motos e montanhas — onde ideias ganham asas.
+          </p>
+          <div class="mt rv">
+            <a href="/biografia" class="btn btn--ghost">Ler mais <i></i></a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== ELARION ===== -->
+  <section id="elarion" class="band">
+    <div class="wrap">
+      <h2 class="label rv">Sobre Elarion</h2>
+      <div class="cols">
+        <div>
+          <p class="lede rv">Um reino poderoso, cercado por aliados e rivais.</p>
+          <p class="prose rv">
+            Elarion é um reino poderoso, cercado por aliados e rivais como Dornareth, o Vale de Nyrah
+            e Shar'azim…
+          </p>
+          <div class="mt rv">
+            <a href="#" class="btn btn--ghost" id="mapBtn">Ver mapa ampliado <i></i></a>
+          </div>
+        </div>
+        <div class="rv">
+          <MapElarion />
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== ONDE COMPRAR ===== -->
+  <section id="ondecomprar">
+    <div class="wrap">
+      <h2 class="label rv">Onde comprar</h2>
+      <p class="lede rv">Adquira agora a obra completa nas principais plataformas.</p>
+      <div class="buys rv">
+        {buys.map((b) => <BuyCard href={b.href} title={b.title} meta={b.meta} cta={b.cta} />)}
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== CONTATO ===== -->
+  <section id="contato" class="band">
+    <div class="wrap">
+      <h2 class="label rv">Contato</h2>
+      <div class="cols">
+        <div>
+          <p class="lede rv">Acompanhe as crônicas de Elarion.</p>
+          <p class="prose rv">
+            Novidades sobre a saga, bastidores da escrita e o Jornal de Elarion. Deixe uma mensagem
+            ou fale comigo no Instagram.
+          </p>
+          <div class="mt rv">
+            <a href={site.instagram} target="_blank" rel="noopener" class="btn">
+              {site.instagramHandle} <i></i>
+            </a>
+          </div>
+        </div>
+        <div>
+          <form
+            class="cform rv"
+            data-cform
+            method="POST"
+            action={contact.formEndpoint || undefined}
+          >
+            <input type="text" name="nome" required autocomplete="name" aria-label="Seu nome" placeholder="Seu nome" />
+            <input type="email" name="email" required autocomplete="email" aria-label="Seu e-mail" placeholder="Seu e-mail" />
+            <input type="text" name="assunto" required aria-label="Assunto" placeholder="Assunto" />
+            <textarea name="mensagem" rows="5" aria-label="Sua mensagem" placeholder="Sua mensagem (opcional)"></textarea>
+            <input type="text" name="_gotcha" class="hp" tabindex="-1" autocomplete="off" aria-hidden="true" />
+            <button type="submit" class="btn">Enviar <i></i></button>
+            <p class="cform-note" data-cform-note hidden></p>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <Footer />
+  <Toast />
+</Base>
+
+<script>
+  import { boot } from '@/scripts/main';
+  boot();
+</script>
+
+<style>
+  .buys {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 1px;
+    background: rgba(159, 184, 212, 0.14);
+    border: 1px solid rgba(159, 184, 212, 0.14);
+    margin-top: 56px;
+  }
+
+  /* A Obra: capa + texto */
+  .cols--obra {
+    align-items: center;
+  }
+  .cover-wrap {
+    display: flex;
+    justify-content: center;
+  }
+  .cover {
+    width: 100%;
+    max-width: 440px;
+    height: auto;
+    border: 1px solid rgba(159, 184, 212, 0.14);
+    box-shadow:
+      0 40px 80px -30px rgba(0, 0, 0, 0.85),
+      0 0 0 1px rgba(201, 151, 77, 0.08);
+  }
+  @media (max-width: 900px) {
+    .cover {
+      max-width: 320px;
+    }
+  }
+
+  /* Formulário de contato */
+  .cform {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+  .cform input,
+  .cform textarea {
+    width: 100%;
+    background: rgba(159, 184, 212, 0.04);
+    border: 1px solid rgba(159, 184, 212, 0.18);
+    color: var(--bone);
+    font-family: var(--body);
+    font-size: 0.95rem;
+    padding: 14px 16px;
+    transition: border-color 0.4s var(--ease), background 0.4s var(--ease);
+  }
+  .cform input::placeholder,
+  .cform textarea::placeholder {
+    color: var(--bone-dim);
+  }
+  .cform input:focus,
+  .cform textarea:focus {
+    outline: none;
+    border-color: var(--gold);
+    background: rgba(201, 151, 77, 0.05);
+  }
+  .cform textarea {
+    resize: vertical;
+    min-height: 120px;
+  }
+  .cform .btn {
+    align-self: flex-start;
+    cursor: pointer;
+  }
+  .cform .hp {
+    position: absolute;
+    left: -9999px;
+    width: 1px;
+    height: 1px;
+    opacity: 0;
+  }
+  .cform-note {
+    font-size: 0.86rem;
+    line-height: 1.6;
+    color: var(--frost);
+  }
+</style>
