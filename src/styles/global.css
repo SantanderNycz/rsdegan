@@ -152,14 +152,13 @@ img {
   font-size: clamp(1.9rem, 3.6vw, 2.9rem);
   line-height: 1.1;
   letter-spacing: 0.04em;
-  color: var(--frost);
-  opacity: 0.9;
+  color: var(--bone);
   margin-bottom: 40px;
 }
 .lede {
   font-family: var(--display);
   font-weight: 400;
-  font-size: clamp(2rem, 3.6vw, 3rem);
+  font-size: clamp(2.4rem, 4.1vw, 3.4rem);
   line-height: 1.2;
   max-width: 20ch;
 }
@@ -254,34 +253,35 @@ section {
   opacity: 0.8;
 }
 
-/* Dragão: emenda entre secções, centrado na zona sem texto (o .seam é uma
-   âncora de altura zero no limite entre duas secções). */
+/* Dragão: na emenda entre secções (mesma altura), rente à margem direita,
+   tamanho original. O .seam é uma âncora de altura zero no limite entre secções. */
+/* z-index negativo: o dragão da emenda fica atrás do conteúdo das secções
+   vizinhas (fundos transparentes), sem cobrir botões/títulos. */
 .seam {
   position: relative;
   height: 0;
-  z-index: 0;
+  z-index: -1;
 }
 .silh--dragon {
-  left: 50%;
+  right: 0;
   top: 50%;
-  width: 40%;
-  transform: translate(-50%, -50%);
+  width: 62%;
+  transform: translateY(-50%);
 }
 
-/* Espada: acento discreto no canto inferior-esquerdo do "autor" (imagem muito
-   alta 228×968 — mantida estreita para não cruzar o título/lede da coluna). */
+/* Espada: posição original (topo-esquerda do "autor"), tamanho original. */
 .silh--sword {
-  left: 1.5%;
-  bottom: 7%;
-  width: 8%;
+  left: -2%;
+  top: 2%;
+  width: 19%;
 }
 
 @media (max-width: 900px) {
   .silh--dragon {
-    width: 60%;
+    width: 72%;
   }
   .silh--sword {
-    width: 13%;
+    width: 24%;
   }
 }
 
@@ -347,7 +347,7 @@ section {
   font-weight: 400;
   font-size: clamp(2.2rem, 4vw, 3.2rem);
   line-height: 1.08;
-  color: var(--frost);
+  color: var(--bone);
   margin-top: 2em;
   letter-spacing: 0.01em;
 }

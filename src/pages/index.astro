@@ -103,9 +103,6 @@ import { buys, book, site, contact } from '@/data/site';
             Dornareth e o Vale de Nyrah. Das capitais douradas às fronteiras
             geladas, cada território guarda a sua própria história.
           </p>
-          <div class="mt rv">
-            <a href="#" class="btn btn--ghost" id="mapBtn">Ver mapa ampliado <i></i></a>
-          </div>
         </div>
         <div class="rv">
           <MapElarion />
@@ -185,9 +182,15 @@ import { buys, book, site, contact } from '@/data/site';
   .cols--obra {
     align-items: center;
   }
+  /* Alinha a capa com o título "Os Dragões Brancos" (mesma margem esquerda). */
   .cover-wrap {
     display: flex;
-    justify-content: center;
+    justify-content: flex-start;
+  }
+  @media (max-width: 900px) {
+    .cover-wrap {
+      justify-content: center;
+    }
   }
   .cover {
     width: 100%;
