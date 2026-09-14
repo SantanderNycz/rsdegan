@@ -123,8 +123,10 @@ const mapSrc: ImageMetadata | null = mapaElarion; // mapa oficial de Elarion
   }
 
   /* --- Pré-visualização estática (abre o modal) --- */
+  /* Card quadrado: a imagem retrato preenche todo o quadrado (recortada),
+     o que justifica clicar para ver o mapa completo no modal. */
   .map--preview {
-    aspect-ratio: 3 / 4; /* mapa é retrato (1279×2049) */
+    aspect-ratio: 1 / 1;
     background: #0a1018;
   }
   .map--preview:hover {
@@ -143,7 +145,8 @@ const mapSrc: ImageMetadata | null = mapaElarion; // mapa oficial de Elarion
   .map-open :global(img) {
     width: 100%;
     height: 100%;
-    object-fit: contain;
+    object-fit: cover;
+    object-position: center;
     -webkit-user-select: none;
     user-select: none;
     transition: transform 0.8s var(--ease), filter 0.6s var(--ease);

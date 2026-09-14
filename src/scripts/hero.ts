@@ -145,12 +145,23 @@ export function initHero({ snow }: HeroOptions): void {
 
       if (setCueOpacity) setCueOpacity(Math.max(0, 1 - p * 3));
     },
-    onToggle: (self) => {
-      // Pausa a neve/névoa quando o hero sai do viewport.
-      snow?.setVisible(self.isActive);
-    },
   });
 
-  // Estado inicial da neve alinhado com a visibilidade do hero.
-  snow?.setVisible(true);
+  /* ---------- Neve contínua enquanto o herói estiver visível ----------
+     Antes a neve era pausada pelo onToggle deste ScrollTrigger (scrub), que
+     fica inativo assim que a base do herói cruza o fim do viewport — o que
+     parava a neve com o palco ainda à vista. Um IntersectionObserver só
+     pausa quando o herói sai por completo, mantendo a queda contínua. */
+  if (snow) {
+    if ('IntersectionObserver' in window) {
+      const io = new IntersectionObserver(
+        (entries) => {
+          for (const e of entries) snow.setVisible(e.isIntersecting);
+        },
+        { threshold: 0 }
+      );
+      io.observe(hero);
+    }
+    snow.setVisible(true);
+  }
 }
