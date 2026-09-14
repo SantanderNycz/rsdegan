@@ -109,17 +109,21 @@ export function initMotion(): void {
 
   /* ---------- Silhuetas: fade-in + parallax ---------- */
   gsap.utils.toArray<HTMLElement>('.silh').forEach((s, i) => {
-    const section = s.closest('section') ?? s;
+    const section = s.closest('section');
+    const trigger = section ?? s;
     ScrollTrigger.create({
-      trigger: section,
-      start: 'top 80%',
+      trigger,
+      start: 'top 85%',
       onEnter: () => s.classList.add('in'),
     });
+    // Silhueta de divisória (entre secções, sem section ancestral): fica estável,
+    // sem parallax — para não invadir o texto das secções vizinhas.
+    if (!section) return;
     gsap.fromTo(
       s,
       { yPercent: i ? -6 : 5 },
       {
-        yPercent: i ? 10 : -6,
+        yPercent: i ? 8 : -5,
         ease: 'none',
         scrollTrigger: {
           trigger: section,

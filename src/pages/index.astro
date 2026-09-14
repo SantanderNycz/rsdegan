@@ -20,7 +20,6 @@ import { buys, book, site, contact } from '@/data/site';
 
   <!-- ===== A OBRA ===== -->
   <section id="obra">
-    <Silhouette variant="dragon" />
     <div class="wrap">
       <h2 class="label rv">{book.title}</h2>
       <div class="cols cols--obra">
@@ -55,6 +54,11 @@ import { buys, book, site, contact } from '@/data/site';
       </div>
     </div>
   </section>
+
+  <!-- Dragão decorativo na emenda entre secções (fora das colunas de texto). -->
+  <div class="seam seam--dragon" aria-hidden="true">
+    <Silhouette variant="dragon" />
+  </div>
 
   <!-- ===== EXCERTO ===== (renderiza só com passagem real; ver Excerpt.astro) -->
   <Excerpt quote={null} attrib={`${book.title} · ${book.volume}`} />

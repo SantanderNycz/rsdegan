@@ -136,7 +136,11 @@ export function initHero({ snow }: HeroOptions): void {
     scrub: true,
     onUpdate: (self) => {
       const p = self.progress; // 0 → 1 ao longo do hero
-      setImgY(-p * travel);
+      // Imagem quase fixa: a imagem retrato é muito mais alta que o viewport,
+      // então usar `travel` inteiro fazia-a deslizar ~3× mais rápido que o
+      // scroll. Limita o deslize a ~18vh — leve respiro, sem "correr".
+      const drift = Math.min(travel, innerHeight * 0.18);
+      setImgY(-p * drift);
 
       const q = Math.min(1, p / 0.62); // conteúdo dissolve-se aos 62%
       setInnerOpacity(1 - q);
