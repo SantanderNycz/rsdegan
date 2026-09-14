@@ -6,7 +6,7 @@
 export const site = {
   name: 'R.S. Degan',
   role: 'Autor de Fantasia Medieval',
-  title: 'R.S. Degan — Autor de Fantasia Medieval',
+  title: 'R.S. Degan - Bem vindos à Elarion',
   description:
     'R.S. Degan, autor de Os Dragões Brancos. Uma jornada épica entre reinos ameaçados por sombras antigas.',
   url: 'https://rsdegan.com',
