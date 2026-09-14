@@ -59,6 +59,24 @@ import { site, book } from '@/data/site';
     align-items: center;
     justify-content: center;
   }
+  /* Fade final: dissolve a base do herói (imagem + neve + grão) no --ink,
+     integrando-o com a secção seguinte. Acima das camadas de neve/grão. */
+  .stage::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 30vh;
+    z-index: 9;
+    pointer-events: none;
+    background: linear-gradient(
+      to bottom,
+      transparent 0%,
+      rgba(8, 10, 15, 0.55) 55%,
+      var(--ink) 100%
+    );
+  }
   .bg {
     position: absolute;
     inset: 0;
@@ -80,8 +98,10 @@ import { site, book } from '@/data/site';
       linear-gradient(
         to bottom,
         rgba(8, 10, 15, 0.5) 0%,
-        rgba(8, 10, 15, 0.12) 30%,
-        rgba(8, 10, 15, 0.55) 74%,
+        rgba(8, 10, 15, 0.12) 28%,
+        rgba(8, 10, 15, 0.4) 58%,
+        rgba(8, 10, 15, 0.78) 82%,
+        rgba(8, 10, 15, 0.96) 92%,
         var(--ink) 100%
       ),
       radial-gradient(ellipse 68% 54% at 50% 48%, rgba(8, 10, 15, 0.72) 0%, transparent 72%);
@@ -138,8 +158,8 @@ import { site, book } from '@/data/site';
     margin-bottom: 30px;
   }
   h1 {
-    font-family: var(--display);
-    font-weight: 300;
+    font-family: var(--title);
+    font-weight: 400;
     font-size: clamp(3rem, 10vw, 8.6rem);
     line-height: 0.94;
     letter-spacing: 0.03em;
@@ -179,7 +199,7 @@ import { site, book } from '@/data/site';
     position: absolute;
     bottom: 34px;
     left: 50%;
-    z-index: 6;
+    z-index: 10;
     font-size: 9px;
     letter-spacing: 0.36em;
     text-transform: uppercase;

@@ -1,12 +1,10 @@
 ---
-/* MapElarion — mapa com pan/zoom interativo (ilha isolada, lógica em map.ts).
+/* MapElarion — pré-visualização estática + modal com pan/zoom (lógica em map.ts).
    ------------------------------------------------------------------
-   ASSET EM FALTA: não existe ainda ficheiro do mapa.
-   Para ativar o pan/zoom:
-     1. Colocar a arte em: src/assets/mapa-elarion.png  (ideal: ≥2500px largura)
-     2. Descomentar o import abaixo e trocar `mapSrc` para essa imagem.
-   Enquanto `mapSrc` for null, renderiza um placeholder marcado e a
-   lógica de pan/zoom não é inicializada.
+   Inline: imagem estática do mapa, sem zoom direto. Clicar na pré-visualização
+   (ou no botão "Ver mapa ampliado") abre um <dialog> onde o utilizador pode
+   arrastar e ampliar à vontade.
+   Enquanto `mapSrc` for null, renderiza um placeholder e nada é inicializado.
    ------------------------------------------------------------------ */
 import { Picture } from 'astro:assets';
 import type { ImageMetadata } from 'astro';
@@ -17,33 +15,76 @@ const mapSrc: ImageMetadata | null = mapaElarion; // mapa oficial de Elarion
 
 {
   mapSrc ? (
-    <figure class="map map--live">
-      <div
-        class="map-viewport"
-        data-map-viewport
-        tabindex="0"
-        role="img"
-        aria-label="Mapa de Elarion. Arraste para deslocar; use as setas do teclado e as teclas + e − para ampliar."
-      >
-        <div class="map-canvas" data-map-canvas>
+    <>
+      <figure class="map map--preview">
+        <button
+          type="button"
+          class="map-open"
+          data-map-open
+          aria-haspopup="dialog"
+          aria-label="Abrir o mapa completo de Elarion para ampliar"
+        >
           <Picture
             src={mapSrc}
             alt="Mapa do reino de Elarion: Avarenth, Vale de Nyrah, Picos do Trovão, Marshber, Maré Solitária e territórios vizinhos."
-            widths={[640, 960, 1279]}
+            widths={[420, 640, 960]}
             sizes="(max-width: 900px) 90vw, 560px"
             formats={['avif', 'webp']}
             fallbackFormat="jpg"
             loading="lazy"
             draggable={false}
           />
+          <span class="map-open__hint">
+            <svg viewBox="0 0 24 24" width="15" height="15" aria-hidden="true" focusable="false">
+              <path
+                d="M10 4H5a1 1 0 0 0-1 1v5m10-6h5a1 1 0 0 1 1 1v5M10 20H5a1 1 0 0 1-1-1v-5m10 6h5a1 1 0 0 0 1-1v-5"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.6"
+                stroke-linecap="round"
+              />
+            </svg>
+            Ver mapa completo
+          </span>
+        </button>
+      </figure>
+
+      <dialog class="map-modal" data-map-modal aria-label="Mapa completo de Elarion">
+        <div class="map-modal__inner">
+          <div class="map-modal__bar">
+            <span class="map-modal__title">Mapa de Elarion</span>
+            <div class="map-controls">
+              <button type="button" data-map-zoom-out aria-label="Diminuir zoom">−</button>
+              <button type="button" data-map-reset aria-label="Repor mapa">↺</button>
+              <button type="button" data-map-zoom-in aria-label="Aumentar zoom">+</button>
+            </div>
+            <button type="button" class="map-modal__close" data-map-close aria-label="Fechar mapa">
+              ✕
+            </button>
+          </div>
+          <div
+            class="map-viewport"
+            data-map-viewport
+            tabindex="0"
+            role="img"
+            aria-label="Mapa de Elarion. Arraste para deslocar; use as setas do teclado e as teclas + e − para ampliar."
+          >
+            <div class="map-canvas" data-map-canvas>
+              <Picture
+                src={mapSrc}
+                alt="Mapa do reino de Elarion: Avarenth, Vale de Nyrah, Picos do Trovão, Marshber, Maré Solitária e territórios vizinhos."
+                widths={[960, 1279]}
+                sizes="90vw"
+                formats={['avif', 'webp']}
+                fallbackFormat="jpg"
+                loading="lazy"
+                draggable={false}
+              />
+            </div>
+          </div>
         </div>
-      </div>
-      <div class="map-controls" aria-hidden="false">
-        <button type="button" data-map-zoom-out aria-label="Diminuir zoom">−</button>
-        <button type="button" data-map-reset aria-label="Repor mapa">↺</button>
-        <button type="button" data-map-zoom-in aria-label="Aumentar zoom">+</button>
-      </div>
-    </figure>
+      </dialog>
+    </>
   ) : (
     <div class="map map--placeholder" role="img" aria-label="Mapa de Elarion (arte por integrar)">
       <p>Mapa de Elarion</p>
@@ -81,23 +122,134 @@ const mapSrc: ImageMetadata | null = mapaElarion; // mapa oficial de Elarion
     color: var(--gold-lo);
   }
 
-  /* --- versão interativa --- */
-  .map--live {
+  /* --- Pré-visualização estática (abre o modal) --- */
+  .map--preview {
     aspect-ratio: 3 / 4; /* mapa é retrato (1279×2049) */
     background: #0a1018;
   }
-  .map--live:hover {
+  .map--preview:hover {
     border-color: rgba(201, 151, 77, 0.45);
   }
-  .map-viewport {
+  .map-open {
+    display: block;
+    width: 100%;
+    height: 100%;
+    padding: 0;
+    border: 0;
+    background: none;
+    cursor: pointer;
+    position: relative;
+  }
+  .map-open :global(img) {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    -webkit-user-select: none;
+    user-select: none;
+    transition: transform 0.8s var(--ease), filter 0.6s var(--ease);
+  }
+  .map-open:hover :global(img),
+  .map-open:focus-visible :global(img) {
+    transform: scale(1.03);
+    filter: brightness(1.06);
+  }
+  .map-open__hint {
     position: absolute;
-    inset: 0;
+    left: 50%;
+    bottom: 14px;
+    transform: translateX(-50%);
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 9px 16px;
+    background: rgba(8, 10, 15, 0.72);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(201, 151, 77, 0.32);
+    color: var(--bone);
+    font-family: var(--body);
+    font-size: 10px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    white-space: nowrap;
+    transition: border-color 0.4s var(--ease), color 0.4s var(--ease);
+  }
+  .map-open:hover .map-open__hint,
+  .map-open:focus-visible .map-open__hint {
+    border-color: var(--gold);
+    color: var(--gold);
+  }
+
+  /* --- Modal (dialog nativo) --- */
+  .map-modal {
+    padding: 0;
+    border: 0;
+    background: transparent;
+    max-width: 100vw;
+    max-height: 100vh;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    overflow: hidden;
+  }
+  .map-modal[open] {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .map-modal::backdrop {
+    background: rgba(4, 6, 10, 0.82);
+    backdrop-filter: blur(3px);
+    -webkit-backdrop-filter: blur(3px);
+  }
+  .map-modal__inner {
+    display: flex;
+    flex-direction: column;
+    width: min(1100px, 94vw);
+    height: min(92vh, 100%);
+    margin: auto;
+    padding: 3vh 0;
+  }
+  .map-modal__bar {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 14px;
+    color: var(--bone);
+  }
+  .map-modal__title {
+    font-family: var(--title);
+    font-size: clamp(1.2rem, 3vw, 1.7rem);
+    letter-spacing: 0.04em;
+    color: var(--frost);
+    margin-right: auto;
+  }
+  .map-modal__close {
+    width: 40px;
+    height: 40px;
+    display: grid;
+    place-items: center;
+    background: rgba(8, 10, 15, 0.72);
+    border: 1px solid rgba(159, 184, 212, 0.24);
+    color: var(--bone);
+    font-size: 15px;
+    line-height: 1;
+    cursor: pointer;
+    transition: border-color 0.4s var(--ease), color 0.4s var(--ease);
+  }
+  .map-modal__close:hover {
+    border-color: var(--gold);
+    color: var(--gold);
+  }
+  .map-viewport {
+    position: relative;
+    flex: 1;
+    min-height: 0;
+    border: 1px solid rgba(159, 184, 212, 0.18);
+    background: #0a1018;
     cursor: grab;
     touch-action: none;
     overflow: hidden;
-  }
-  .map-viewport.is-zoomed {
-    cursor: grab;
   }
   .map-viewport:active {
     cursor: grabbing;
@@ -116,32 +268,32 @@ const mapSrc: ImageMetadata | null = mapaElarion; // mapa oficial de Elarion
     user-select: none;
   }
   .map-controls {
-    position: absolute;
-    right: 14px;
-    bottom: 14px;
     display: flex;
     gap: 6px;
-    z-index: 2;
   }
   .map-controls button {
-    width: 34px;
-    height: 34px;
+    width: 40px;
+    height: 40px;
     display: grid;
     place-items: center;
     background: rgba(8, 10, 15, 0.72);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
     border: 1px solid rgba(159, 184, 212, 0.2);
     color: var(--bone);
     font-size: 16px;
     line-height: 1;
     cursor: pointer;
-    transition:
-      border-color 0.4s var(--ease),
-      color 0.4s var(--ease);
+    transition: border-color 0.4s var(--ease), color 0.4s var(--ease);
   }
   .map-controls button:hover {
     border-color: var(--gold);
     color: var(--gold);
+  }
+
+  @media (max-width: 760px) {
+    .map-modal__inner {
+      width: 100vw;
+      height: 100%;
+      padding: 2vh 3vw;
+    }
   }
 </style>

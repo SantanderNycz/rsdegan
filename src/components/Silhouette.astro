@@ -1,24 +1,26 @@
 ---
-/* Silhouette — dragão ou espada em marca-d'água (10% opacidade, parallax).
-   SVG inline e minimal (equivalente a saída SVGO): sem metadados, viewBox mantido. */
+/* Silhouette — dragão ou espada em marca-d'água (parallax, baixa opacidade).
+   Agora usa as fotos (recorte PNG com transparência) em src/assets, mantendo
+   o mesmo papel decorativo de fundo das silhuetas anteriores. */
+import { Picture } from 'astro:assets';
+import dragao from '@/assets/dragao.png';
+import espada from '@/assets/espada.png';
+
 interface Props {
   variant: 'dragon' | 'sword';
 }
 const { variant } = Astro.props;
+const src = variant === 'dragon' ? dragao : espada;
 ---
 
-{
-  variant === 'dragon' ? (
-    <svg class="silh silh--dragon" viewBox="0 0 400 260" aria-hidden="true" focusable="false">
-      <path d="M20 200C70 190 90 150 130 140C120 110 140 80 180 78C200 40 250 30 280 55C300 40 330 45 340 70C365 75 380 100 370 125C390 140 385 175 355 182C340 210 300 218 275 200C250 225 200 230 175 205C140 225 70 228 20 200Z" />
-      <path d="M180 78C150 55 100 50 60 70C95 62 140 68 165 88Z" />
-    </svg>
-  ) : (
-    <svg class="silh silh--sword" viewBox="0 0 60 340" aria-hidden="true" focusable="false">
-      <path d="M30 0 38 42 38 240 30 268 22 240 22 42Z" />
-      <rect x="2" y="240" width="56" height="9" />
-      <rect x="26" y="249" width="8" height="62" />
-      <circle cx="30" cy="322" r="11" />
-    </svg>
-  )
-}
+<Picture
+  src={src}
+  alt=""
+  aria-hidden="true"
+  draggable={false}
+  class={`silh silh--${variant}`}
+  widths={variant === 'dragon' ? [640, 1024] : [280, 480]}
+  sizes={variant === 'dragon' ? '62vw' : '19vw'}
+  formats={['avif', 'webp']}
+  loading="lazy"
+/>

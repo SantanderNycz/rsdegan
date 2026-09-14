@@ -34,9 +34,14 @@ export function initHero({ snow }: HeroOptions): void {
 
   /* ---------- Dimensionar a imagem para cobrir (com margem de percurso) ---------- */
   let travel = 0;
+  let lastVW = 0;
+  let lastVH = 0;
   function layoutBg() {
     const vw = innerWidth;
     const vh = innerHeight;
+    if (vw === lastVW && vh === lastVH) return; // evita reflow redundante
+    lastVW = vw;
+    lastVH = vh;
     let w = vw;
     let h = w / AR;
     if (h < vh) {

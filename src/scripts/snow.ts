@@ -100,10 +100,21 @@ export function initSnow(refs: Partial<SnowRefs> = {}): SnowHandles | null {
     [1, 'rgba(120,150,186,0)'],
   ]);
 
+  // Guarda contra realocações redundantes: mudar canvas.width/height reafeta
+  // os buffers (custo alto). Só refaz quando a dimensão real muda — evita a
+  // tempestade de realocações quando a barra de URL do mobile aparece/some
+  // ou quando a altura do documento oscila (uma das causas do travamento).
+  let lastW = 0;
+  let lastH = 0;
   function fitAll() {
+    const w = Math.round(innerWidth * DPR);
+    const h = Math.round(innerHeight * DPR);
+    if (w === lastW && h === lastH) return;
+    lastW = w;
+    lastH = h;
     for (const { c, x } of canvases) {
-      c.width = innerWidth * DPR;
-      c.height = innerHeight * DPR;
+      c.width = w;
+      c.height = h;
       x.setTransform(DPR, 0, 0, DPR, 0, 0);
     }
   }
@@ -143,15 +154,15 @@ export function initSnow(refs: Partial<SnowRefs> = {}): SnowHandles | null {
     { x: canvases[3].x, f: makeFlakes(mob ? 8 : 16, 0.7, 1.0, 0.9) },
   ];
 
-  let visible = true;
   let raf = 0;
+  let running = false;
   let t = 0;
   let last = 0;
   const interval = 1000 / 36; // teto ~36fps
 
   function frame(now: number) {
+    if (!running) return;
     raf = requestAnimationFrame(frame);
-    if (!visible) return;
     if (last && now - last < interval) return;
     // dt relativo a 60fps para manter a mesma velocidade percebida
     const dt = last ? Math.min(2.5, (now - last) / (1000 / 60)) : 1;
@@ -190,16 +201,30 @@ export function initSnow(refs: Partial<SnowRefs> = {}): SnowHandles | null {
       x.globalAlpha = 1;
     }
   }
-  raf = requestAnimationFrame(frame);
+  // Inicia/para o loop por completo conforme a visibilidade — em vez de manter
+  // um rAF vazio a acordar a thread 60×/s enquanto se lê o resto da página
+  // (a neve só existe no herói). Menos contenção durante o scroll longo.
+  function start() {
+    if (running) return;
+    running = true;
+    last = 0; // reinicia o delta ao voltar a ficar visível
+    raf = requestAnimationFrame(frame);
+  }
+  function stop() {
+    running = false;
+    cancelAnimationFrame(raf);
+  }
+
+  start();
   addEventListener('resize', fitAll);
 
   return {
     setVisible(v: boolean) {
-      visible = v;
-      if (v) last = 0; // reinicia o delta ao voltar a ficar visível
+      if (v) start();
+      else stop();
     },
     destroy() {
-      cancelAnimationFrame(raf);
+      stop();
       removeEventListener('resize', fitAll);
       ro.disconnect();
     },

@@ -1,11 +1,11 @@
 /* ============================================================
-   map.ts — mapa de Elarion com pan/zoom interativo
+   map.ts — mapa de Elarion: pré-visualização + modal com pan/zoom.
    Ilha isolada. Ativa-se apenas quando existe imagem do mapa.
 
-   - Arrastar (pointer/touch) para deslocar; roda do rato / botões
-     +/- / duplo-clique para zoom; pinça com dois dedos.
-   - Teclado: setas deslocam, +/- fazem zoom, 0 repõe (a11y).
-   - Translação limitada para a imagem não sair da moldura.
+   - A pré-visualização inline é estática (sem zoom direto).
+   - "Ver mapa ampliado" ou clicar na pré-visualização abre um <dialog>
+     com arrastar (pointer/touch), roda do rato, botões +/−, duplo-clique,
+     pinça e teclado (setas/±/0). Fecha por botão, backdrop ou Esc (nativo).
    ============================================================ */
 
 interface Pt {
@@ -14,27 +14,25 @@ interface Pt {
 }
 
 const MIN_SCALE = 1;
-const MAX_SCALE = 4;
+const MAX_SCALE = 5;
 
 export function initMap(): void {
+  const modal = document.querySelector<HTMLDialogElement>('[data-map-modal]');
   const viewport = document.querySelector<HTMLElement>('[data-map-viewport]');
   const canvas = document.querySelector<HTMLElement>('[data-map-canvas]');
+  const openBtn = document.getElementById('mapBtn');
+  const preview = document.querySelector<HTMLElement>('[data-map-open]');
 
-  // Botão "Ver mapa ampliado" (href="#"): impede o salto ao topo e, quando o
-  // mapa interativo existir, foca-o. Com placeholder, é um no-op (como no protótipo).
-  document.getElementById('mapBtn')?.addEventListener('click', (e) => {
-    e.preventDefault();
-    if (viewport) {
-      viewport.scrollIntoView({ behavior: 'smooth', block: 'center' });
-      viewport.focus();
-    }
-  });
+  // Sem mapa interativo (placeholder): o botão do texto não deve saltar ao topo.
+  if (!modal || !viewport || !canvas) {
+    openBtn?.addEventListener('click', (e) => e.preventDefault());
+    return;
+  }
 
-  if (!viewport || !canvas) return; // placeholder sem imagem: não inicializa
-
-  const zoomIn = document.querySelector<HTMLButtonElement>('[data-map-zoom-in]');
-  const zoomOut = document.querySelector<HTMLButtonElement>('[data-map-zoom-out]');
-  const reset = document.querySelector<HTMLButtonElement>('[data-map-reset]');
+  const zoomIn = modal.querySelector<HTMLButtonElement>('[data-map-zoom-in]');
+  const zoomOut = modal.querySelector<HTMLButtonElement>('[data-map-zoom-out]');
+  const reset = modal.querySelector<HTMLButtonElement>('[data-map-reset]');
+  const closeBtn = modal.querySelector<HTMLButtonElement>('[data-map-close]');
 
   let scale = 1;
   let tx = 0;
@@ -59,6 +57,13 @@ export function initMap(): void {
     canvas!.style.transform = `translate(${tx}px, ${ty}px) scale(${scale})`;
     viewport!.setAttribute('aria-label', `Mapa de Elarion, ampliação ${scale.toFixed(1)}×`);
     viewport!.classList.toggle('is-zoomed', scale > 1);
+  }
+
+  function resetView() {
+    scale = 1;
+    tx = 0;
+    ty = 0;
+    apply();
   }
 
   function zoomTo(next: number, originX = 0.5, originY = 0.5) {
@@ -135,7 +140,7 @@ export function initMap(): void {
   viewport.addEventListener('pointerup', endPointer);
   viewport.addEventListener('pointercancel', endPointer);
 
-  /* ---------- Teclado (a11y) ---------- */
+  /* ---------- Teclado (a11y) — Esc fica com o <dialog> nativo ---------- */
   viewport.addEventListener('keydown', (e) => {
     const step = 40;
     switch (e.key) {
@@ -148,10 +153,7 @@ export function initMap(): void {
         zoomTo(scale / 1.2);
         break;
       case '0':
-        scale = 1;
-        tx = 0;
-        ty = 0;
-        apply();
+        resetView();
         break;
       case 'ArrowLeft':
         tx += step;
@@ -175,16 +177,31 @@ export function initMap(): void {
     e.preventDefault();
   });
 
-  /* ---------- Botões ---------- */
+  /* ---------- Botões de zoom ---------- */
   zoomIn?.addEventListener('click', () => zoomTo(scale * 1.3));
   zoomOut?.addEventListener('click', () => zoomTo(scale / 1.3));
-  reset?.addEventListener('click', () => {
-    scale = 1;
-    tx = 0;
-    ty = 0;
-    apply();
+  reset?.addEventListener('click', resetView);
+
+  /* ---------- Abrir / fechar o modal ---------- */
+  function openModal() {
+    if (!modal!.open) modal!.showModal();
+    resetView(); // começa sempre sem zoom; rect já é válido com o modal aberto
+    viewport!.focus();
+  }
+  const closeModal = () => modal!.close();
+
+  openBtn?.addEventListener('click', (e) => {
+    e.preventDefault();
+    openModal();
+  });
+  preview?.addEventListener('click', openModal);
+  closeBtn?.addEventListener('click', closeModal);
+  // Clique no backdrop (fora do cartão interno) fecha.
+  modal.addEventListener('click', (e) => {
+    if (e.target === modal) closeModal();
   });
 
-  addEventListener('resize', apply);
-  apply();
+  addEventListener('resize', () => {
+    if (modal.open) apply();
+  });
 }

@@ -3,17 +3,12 @@
 import SeoHead from '@/components/SeoHead.astro';
 import '@/styles/global.css';
 
-// Cormorant Garamond (display) — pesos usados no protótipo. Subsets latinos (PT-BR).
-import '@fontsource/cormorant-garamond/latin-300.css';
+// Del Rose (texto geral) e Ancient (títulos principais) são self-hosted via
+// @font-face em global.css. Cormorant Garamond fica só como fallback de serifa
+// (garante acentos PT-BR caso alguma glifa falte nas fontes principais).
 import '@fontsource/cormorant-garamond/latin-400.css';
-import '@fontsource/cormorant-garamond/latin-600.css';
 import '@fontsource/cormorant-garamond/latin-ext-400.css';
-import '@fontsource/cormorant-garamond/latin-300-italic.css';
 import '@fontsource/cormorant-garamond/latin-400-italic.css';
-// Inter (corpo).
-import '@fontsource/inter/latin-300.css';
-import '@fontsource/inter/latin-400.css';
-import '@fontsource/inter/latin-500.css';
 
 interface Props {
   title?: string;
