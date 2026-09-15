@@ -290,11 +290,11 @@ section {
 
 @media (max-width: 900px) {
   .silh--dragon {
-    width: 72%;
+    width: 66%;
   }
   .silh--sword {
-    width: 22%;
-    top: 140px;
+    width: 15%;
+    top: 120px;
   }
 }
 

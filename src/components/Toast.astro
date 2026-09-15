@@ -96,6 +96,19 @@ import { book, toast } from '@/data/site';
       right: 16px;
       bottom: 16px;
       max-width: none;
+      padding: 22px 24px;
+    }
+    /* No telemóvel o card é largo (full-width) — o texto grande do desktop
+       ocuparia meio ecrã. Reduz para tamanhos legíveis sem dominar. */
+    .toast p {
+      font-size: 17px;
+      line-height: 1.5;
+    }
+    .toast b {
+      font-size: 11px;
+    }
+    .toast a {
+      font-size: 11px;
     }
   }
 </style>

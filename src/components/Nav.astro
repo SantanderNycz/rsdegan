@@ -42,14 +42,28 @@ const markHref = home ? '#topo' : '/';
     transition:
       padding 0.5s var(--ease),
       background 0.5s var(--ease),
-      border-color 0.5s var(--ease),
-      backdrop-filter 0.5s var(--ease);
+      border-color 0.5s var(--ease);
+  }
+  /* backdrop-filter num pseudo (não no <nav>): assim o <nav> NÃO vira
+     containing block dos filhos position:fixed — o menu mobile (.links)
+     continua preso à viewport inteira em vez da altura do nav. */
+  nav::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    opacity: 0;
+    backdrop-filter: blur(14px) saturate(1.3);
+    -webkit-backdrop-filter: blur(14px) saturate(1.3);
+    transition: opacity 0.5s var(--ease);
+  }
+  nav.stuck::before {
+    opacity: 1;
   }
   nav.stuck {
     padding: 15px 48px;
     background: rgba(8, 10, 15, 0.72);
-    backdrop-filter: blur(14px) saturate(1.3);
-    -webkit-backdrop-filter: blur(14px) saturate(1.3);
     border-bottom-color: rgba(159, 184, 212, 0.14);
   }
   .mark {
@@ -123,7 +137,15 @@ const markHref = home ? '#topo' : '/';
     }
     .links {
       position: fixed;
-      inset: 0;
+      /* Altura explícita (não `inset:0`): quando o nav fica .stuck com
+         backdrop-filter, ele vira containing block dos filhos fixed — com
+         `inset:0` o overlay herdava a altura do nav (~60px) e o
+         translateY(-100%) não o escondia. 100dvh garante o ecrã inteiro. */
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 100vh;
+      height: 100dvh;
       background: rgba(8, 10, 15, 0.97);
       flex-direction: column;
       justify-content: center;
