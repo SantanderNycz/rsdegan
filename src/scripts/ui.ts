@@ -56,7 +56,7 @@ export function initContactForm(): void {
       });
       if (res.ok) {
         form.reset();
-        showNote('Mensagem enviada. Obrigado — respondo assim que puder.');
+        showNote('Mensagem enviada. Obrigado, respondo assim que puder.');
       } else {
         showNote('Não foi possível enviar agora. Tente novamente ou fale pelo Instagram.');
       }

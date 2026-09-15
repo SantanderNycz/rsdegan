@@ -26,7 +26,7 @@ const overlay = Buffer.from(`
   <text x="80" y="500" fill="#EAEDF2" font-family="Georgia, 'Times New Roman', serif" font-size="86" font-weight="300" letter-spacing="3">R.S. Degan</text>
   <rect x="82" y="524" width="120" height="2" fill="#C9974D"/>
   <text x="80" y="576" fill="#9FB8D4" font-family="Georgia, serif" font-style="italic" font-size="34">Os Dragões Brancos</text>
-  <text x="80" y="112" fill="#C9974D" font-family="Arial, sans-serif" font-size="20" letter-spacing="6">Bem vindo à Elarion</text>
+  <text x="80" y="112" fill="#C9974D" font-family="Arial, sans-serif" font-size="20" letter-spacing="6">Bem-vindo à Elarion</text>
 </svg>`);
 
 await mkdir(outDir, { recursive: true });

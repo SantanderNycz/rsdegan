@@ -6,7 +6,7 @@
 export const site = {
   name: 'R.S. Degan',
   role: 'Autor de Fantasia Medieval',
-  title: 'R.S. Degan - Bem vindos à Elarion',
+  title: 'R.S. Degan - Bem-vindos à Elarion',
   description:
     'R.S. Degan, autor de Os Dragões Brancos. Uma jornada épica entre reinos ameaçados por sombras antigas.',
   url: 'https://rsdegan.com',
@@ -52,7 +52,7 @@ export const buys = [
 
 export const toast = {
   badge: 'Já disponível',
-  href: 'https://loja.uiclap.com/titulo/ua92036',
+  href: 'https://loja.uiclap.com/titulo/ua92036/',
 } as const;
 
 export const contact = {

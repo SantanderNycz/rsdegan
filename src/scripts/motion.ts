@@ -107,32 +107,18 @@ export function initMotion(): void {
     });
   }
 
-  /* ---------- Silhuetas: fade-in + parallax ---------- */
-  gsap.utils.toArray<HTMLElement>('.silh').forEach((s, i) => {
-    const section = s.closest('section');
-    const trigger = section ?? s;
+  /* ---------- Silhuetas: só fade-in ----------
+     As silhuetas agora são âncoras de borda/emenda que atravessam limites de
+     secção (dragão na emenda; espada da direita a descer do mapa para "onde
+     comprar"). O parallax por scrub deslocava-as e podia sobrepô-las ao mapa —
+     ficam estáveis, apenas com o fade-in. */
+  gsap.utils.toArray<HTMLElement>('.silh').forEach((s) => {
+    const trigger = s.closest('section') ?? s;
     ScrollTrigger.create({
       trigger,
       start: 'top 85%',
       onEnter: () => s.classList.add('in'),
     });
-    // Silhueta de divisória (entre secções, sem section ancestral): fica estável,
-    // sem parallax — para não invadir o texto das secções vizinhas.
-    if (!section) return;
-    gsap.fromTo(
-      s,
-      { yPercent: i ? -6 : 5 },
-      {
-        yPercent: i ? 8 : -5,
-        ease: 'none',
-        scrollTrigger: {
-          trigger: section,
-          start: 'top bottom',
-          end: 'bottom top',
-          scrub: true,
-        },
-      }
-    );
   });
 
   // Recalcular quando as fontes/imagens mudarem a altura da página.

@@ -213,6 +213,17 @@ section {
   bottom: 0;
   background: linear-gradient(to top, var(--ink), transparent);
 }
+/* "Sobre Elarion": laterais esvaecidas para transparente (gradiente horizontal),
+   dando contraste à espada que entra pela direita — ela "aparece mais". */
+#elarion.band {
+  background: linear-gradient(
+    to right,
+    transparent 0,
+    var(--ink-2) 14%,
+    var(--ink-2) 86%,
+    transparent 100%
+  );
+}
 .cols {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -269,11 +280,13 @@ section {
   transform: translateY(-50%);
 }
 
-/* Espada: posição original (topo-esquerda do "autor"), tamanho original. */
+/* Espada: entra pela direita da secção "onde comprar", com o topo puxado para
+   cima (abaixo do mapa da secção anterior) e descendo por trás dos cards.
+   Fica atrás do conteúdo (.wrap tem z-index 2) mas acima do fundo da band. */
 .silh--sword {
-  left: -2%;
-  top: 2%;
-  width: 19%;
+  right: 1%;
+  top: -80px;
+  width: 15%;
 }
 
 @media (max-width: 900px) {
@@ -281,7 +294,8 @@ section {
     width: 72%;
   }
   .silh--sword {
-    width: 24%;
+    width: 22%;
+    top: -80px;
   }
 }
 

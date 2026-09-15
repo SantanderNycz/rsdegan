@@ -27,7 +27,7 @@ import { buys, book, site, contact } from '@/data/site';
           <Picture
             class="cover"
             src={capa}
-            alt={`Capa de ${book.title} — ${book.volume}: O Inverno de Elarion`}
+            alt={`Capa de ${book.title} - ${book.volume}: O Inverno de Elarion`}
             widths={[340, 500, 680]}
             sizes="(max-width: 900px) 62vw, 440px"
             formats={['avif', 'webp']}
@@ -65,7 +65,6 @@ import { buys, book, site, contact } from '@/data/site';
 
   <!-- ===== O AUTOR ===== -->
   <section id="autor">
-    <Silhouette variant="sword" />
     <div class="wrap">
       <h2 class="label rv">Sobre o autor</h2>
       <div class="cols">
@@ -113,6 +112,9 @@ import { buys, book, site, contact } from '@/data/site';
 
   <!-- ===== ONDE COMPRAR ===== -->
   <section id="ondecomprar">
+    <!-- Espada decorativa: entra pela direita logo abaixo do mapa (secção
+         anterior) e desce por trás do quadro de opções de compra. -->
+    <Silhouette variant="sword" />
     <div class="wrap">
       <h2 class="label rv">Onde comprar</h2>
       <p class="lede rv">Adquira agora a obra completa nas principais plataformas.</p>
@@ -146,10 +148,9 @@ import { buys, book, site, contact } from '@/data/site';
             method="POST"
             action={contact.formEndpoint || undefined}
           >
-            <input type="text" name="nome" required autocomplete="name" aria-label="Seu nome" placeholder="Seu nome" />
-            <input type="email" name="email" required autocomplete="email" aria-label="Seu e-mail" placeholder="Seu e-mail" />
-            <input type="text" name="assunto" required aria-label="Assunto" placeholder="Assunto" />
-            <textarea name="mensagem" rows="5" aria-label="Sua mensagem" placeholder="Sua mensagem (opcional)"></textarea>
+            <input type="text" name="nome" required autocomplete="name" aria-label="Seu nome" placeholder="Nome" />
+            <input type="email" name="email" required autocomplete="email" aria-label="Seu e-mail" placeholder="E-mail" />
+            <textarea name="mensagem" rows="5" required aria-label="Sua mensagem" placeholder="Mensagem"></textarea>
             <input type="text" name="_gotcha" class="hp" tabindex="-1" autocomplete="off" aria-hidden="true" />
             <button type="submit" class="btn">Enviar <i></i></button>
             <p class="cform-note" data-cform-note hidden></p>
