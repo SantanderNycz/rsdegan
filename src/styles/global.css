@@ -165,7 +165,7 @@ img {
 .prose {
   font-size: clamp(1.3rem, 1rem + 1vw, 1.7rem);
   line-height: 1.4;
-  color: var(--bone-dim);
+  color: var(--bone);
   max-width: 52ch;
   margin-top: 26px;
 }
@@ -280,12 +280,11 @@ section {
   transform: translateY(-50%);
 }
 
-/* Espada: entra pela direita da secção "onde comprar", com o topo puxado para
-   cima (abaixo do mapa da secção anterior) e descendo por trás dos cards.
-   Fica atrás do conteúdo (.wrap tem z-index 2) mas acima do fundo da band. */
+/* Espada: entra pela esquerda de "Sobre Elarion", começando ao nível do título
+   e descendo pela coluna. Fica atrás do conteúdo (.wrap tem z-index 2). */
 .silh--sword {
-  right: 1%;
-  top: -80px;
+  left: -3%;
+  top: 200px;
   width: 15%;
 }
 
@@ -295,7 +294,7 @@ section {
   }
   .silh--sword {
     width: 22%;
-    top: -80px;
+    top: 140px;
   }
 }
 
@@ -457,7 +456,7 @@ section {
   margin-top: 14px;
 }
 .post-item p {
-  color: var(--bone-dim);
+  color: var(--bone);
   margin-top: 14px;
   max-width: 60ch;
   font-size: clamp(1.3rem, 1.05rem + 0.8vw, 1.6rem);
